@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+  --main-colour-one: #1E212B;
+  --main-colour-two: #FFFFFF;
+  --secondary-colour-one: #4D8B31;
+  --secondary-colour-two: #FFC800;
+  --secondary-colour-three: #FF8427;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--main-colour-one);
+  color: var(--main-colour-two);
+  display: grid;
+  grid-template-rows: 2fr 8fr;
+  height: 100vh;
+}
+
+header {
+  display: grid;
+  grid-template-rows: 2fr 1fr;
+  align-items: center;
+}
+
+header h1,
+header h3 {
+  justify-self: center;
+}
+
+header h3 {
+  grid-row-start: 2;
+}
+
+main {
+  background-color: #2A2E3C;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+.game-board {
+  grid-column: 2;
+  box-shadow: 0 0 1px 1px #fff;
+  height: 450px;
+  width: 450px;
+  justify-self: center;
+  margin-top: 100px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.board-square {
+  border: 1px solid #fff;
+  height: 150px;
+  width: 150px;
+}
