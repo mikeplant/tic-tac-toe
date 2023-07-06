@@ -1,3 +1,9 @@
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf);
+}
+
 * {
   box-sizing: border-box;
   --main-colour-one: #1E212B;
@@ -7,6 +13,7 @@
   --secondary-colour-three: #FF8427;
   padding: 0;
   margin: 0;
+  font-family: 'Montserrat';
 }
 
 body {
@@ -54,4 +61,13 @@ main {
   border: 1px solid #fff;
   height: 150px;
   width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat';
+  font-size: 6rem;
+}
+
+.board-square:hover {
+  cursor: pointer;
 }
