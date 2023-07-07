@@ -16,6 +16,10 @@
   font-family: 'Montserrat';
 }
 
+button {
+  border: 0;
+}
+
 body {
   background-color: var(--main-colour-one);
   color: var(--main-colour-two);
@@ -28,6 +32,7 @@ header {
   display: grid;
   grid-template-rows: 2fr 1fr;
   align-items: center;
+  z-index: 2;
 }
 
 header h1,
@@ -59,6 +64,7 @@ main {
 }
 
 .game-board {
+  grid-row: 1;
   grid-column: 2;
   box-shadow: 0 0 1px 6px var(--main-colour-two);
   height: 450px;
@@ -68,6 +74,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   border-radius: 1px;
+  /* position: relative; */
 }
 
 .board-square {
@@ -79,8 +86,55 @@ main {
   align-items: center;
   font-size: 6.4rem;
   font-weight: 600;
+  transition: background-color ease 250ms;
 }
 
 .board-square:hover {
   cursor: pointer;
+}
+
+.board-square.open:hover {
+  background-color: #1E212B;
+  transition: background-color ease 250ms;
+}
+
+.results {
+  grid-column: 1 / span 3;
+  grid-row: 1;
+  height: 450px;
+  margin-top: 100px;
+  opacity: 0.97;
+  position: relative;
+  top: -725px;
+  background-color: var(--main-colour-one);
+  z-index: 1;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  transition: top linear 350ms;
+  font-size: 2em;
+}
+
+.results.show {
+  top: 0;
+  transition: top linear 350ms;
+}
+
+.replay-btn {
+  justify-self: center;
+  background-color: var(--secondary-colour-one);
+  width: 75px;
+  height: 75px;
+  border-radius: 38px;
+  opacity: 1;
+}
+
+.replay-btn:hover {
+  cursor: pointer;
+  background-color: #589e37;
+}
+
+.replay-btn img {
+  height: 50px;
+  width: 50px;
 }
