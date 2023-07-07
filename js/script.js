@@ -1,3 +1,5 @@
+// GAMEBOARD MODULE
+
 const gameBoard = (() => {
   const squares = [];
   const el = document.querySelector('.game-board');
@@ -20,10 +22,7 @@ const gameBoard = (() => {
     squares.forEach(sq => el.append(sq));
   };
 
-  return {
-    init, 
-    el
-  };
+  return {init, el};
 })();
 
 
@@ -32,13 +31,15 @@ const player = (name, type, token) => {
   return {name, type, token, ownedSquares};
 };
 
-
+// GAME LOGIC MODULE
 
 const game = (() => {
   let players = [];
   let currentPlayer;
+  let winner = null;
 
   const getCurrentPlayer = () => currentPlayer;
+  const getWinner = () => winner;
 
   const init = () => {
     gameBoard.init();
@@ -55,20 +56,65 @@ const game = (() => {
     currentPlayer = player1;
   }
 
+  const playerMove = (sqid) => {
+    assignSquareToPlayer(sqid);
+    changePlayer();
+    checkGameOver();
+  }
+
+  const assignSquareToPlayer = (id) => {
+    currentPlayer.ownedSquares.push(id);
+  }
+
   const changePlayer = () => {
     currentPlayer = (currentPlayer === players[0]) ? players[1] : players[0];
+  }
+
+  const checkGameOver = () => {
+    checkForWin();
+    checkForDraw();
+  }
+
+  const checkForWin = () => {
+    players.forEach(p => checkForComboMatch(p));
+  };
+
+  const checkForComboMatch = (p) => {
+    const winningCombos = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ];
+    for (let i = 0; i < winningCombos.length; i++) {
+      if (winningCombos[i].every(sq => p.ownedSquares.includes(sq))) {
+        winner = p;
+        console.log('win') ////
+      }
+    }
+  };
+
+  const checkForDraw = () => {
+    return allSquaresAreOwned() && winner === null;
+  };
+
+  const allSquaresAreOwned = () => {
+    return (players[0].ownedSquares.length + players[1].ownedSquares.length === 9);
   }
 
   return {
     init, 
     getCurrentPlayer,
-    changePlayer
+    getWinner,
+    playerMove
   };
-
 })();
 
-
-
+// EVENT HANDLER MODULE
 
 const eventHandler = (() => {
 
@@ -81,19 +127,28 @@ const eventHandler = (() => {
   };
 
   const handleSquareClick = (e) => {
-    game.getCurrentPlayer().ownedSquares.push(e.target.dataset.sqid);
+    if (!isSquareEmpty(e) || game.getWinner() !== null) return;
     displayHandler.fillSquare(e);
-    game.changePlayer();
+    game.playerMove(parseInt(e.target.dataset.sqid));
+  };
+
+  const isSquareEmpty = (e) => {
+    return (e.target.textContent === '') ? true : false;
   };
 
   return {init};
-  
 })();
+
+// DISPLAY HANDLER MODULE
 
 const displayHandler = (() => {
   const fillSquare = (e) => {
     e.target.textContent = game.getCurrentPlayer().token;
+    colourPlayerToken(e);
   };
+  const colourPlayerToken = (e) => {
+    e.target.style.color = (e.target.textContent === 'X') ? '#FFC800' : '#FF8427';
+  }
 
   return {fillSquare};
 })();
