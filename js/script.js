@@ -1,14 +1,14 @@
 // GAMEBOARD MODULE
 
 const gameBoard = (() => {
-  const squares = [];
+  let squares = [];
   const el = document.querySelector('.game-board');
 
   const init = () => {
-    // resetBoard();
+    resetBoard();
     createSquares();
     render();
-  }
+  };
 
   const createSquares = () => {
     for (let i = 0; i < 9; i++) {
@@ -20,8 +20,9 @@ const gameBoard = (() => {
   };
 
   const resetBoard = () => {
-    /////////////////////////////////////////////
-  }
+    squares = [];
+    Array.from(el.children).forEach(child => el.removeChild(child));
+  };
 
   const render = () => {
     squares.forEach(sq => el.append(sq));
@@ -52,6 +53,17 @@ const game = (() => {
     createPlayers();
   };
 
+  const reset = () => {
+    clearOwnedSquares();
+    currentPlayer = players[0];
+    winner = null;
+    gameBoard.init();
+  };
+
+  const clearOwnedSquares = () => {
+    players.forEach(plyr => plyr.ownedSquares = []);
+  };
+
   const createPlayers = () => {
     const player1 = player('Player One', 'human', 'X');
     players.push(player1);
@@ -59,25 +71,25 @@ const game = (() => {
     players.push(player2);
 
     currentPlayer = player1;
-  }
+  };
 
   const playerMove = (sqid) => {
     assignSquareToPlayer(sqid);
     changePlayer();
     checkGameOver();
-  }
+  };
 
   const assignSquareToPlayer = (id) => {
     currentPlayer.ownedSquares.push(id);
-  }
+  };
 
   const changePlayer = () => {
     currentPlayer = (currentPlayer === players[0]) ? players[1] : players[0];
-  }
+  };
 
   const checkGameOver = () => {
     if (isWin() || isDraw()) displayHandler.showResults(winner);
-  }
+  };
 
   const isWin = () => {
     let win = false;
@@ -110,10 +122,11 @@ const game = (() => {
 
   const allSquaresAreOwned = () => {
     return (players[0].ownedSquares.length + players[1].ownedSquares.length === 9);
-  }
+  };
 
   return {
-    init, 
+    init,
+    reset,
     getCurrentPlayer,
     getWinner,
     playerMove
@@ -131,13 +144,18 @@ const eventHandler = (() => {
 
   const bindEvents = () => {
     gameBoard.el.addEventListener('click', e => handleSquareClick(e));
-    // replayBtn.addEventListener('click', () => gameBoard.init());
+    replayBtn.addEventListener('click', () => handleResetClick());
   };
 
   const handleSquareClick = (e) => {
     if (!isSquareEmpty(e) || game.getWinner() !== null) return;
     displayHandler.fillSquare(e);
     game.playerMove(parseInt(e.target.dataset.sqid));
+  };
+
+  const handleResetClick = () => {
+    displayHandler.hideResults();
+    game.reset();
   };
 
   const isSquareEmpty = (e) => {
@@ -161,24 +179,28 @@ const displayHandler = (() => {
 
   const colourPlayerToken = (e) => {
     e.target.style.color = (e.target.textContent === 'X') ? '#FFC800' : '#FF8427';
-  }
+  };
 
   const updateResultText = (winner) => {
     resultsTextEl.textContent = (winner !== null) ? 
       `${winner.name} wins!`:
       `It's a draw!`;
-  }
+  };
 
   const showResults = (winner) => {
     updateResultText(winner);
     resultsEl.classList.toggle('show');
-  }
+  };
 
   const hideResults = () => {
     resultsEl.classList.toggle('show');
-  }
+  };
 
-  return {fillSquare, showResults};
+  return {
+    fillSquare, 
+    showResults, 
+    hideResults
+  };
 })();
 
 game.init();

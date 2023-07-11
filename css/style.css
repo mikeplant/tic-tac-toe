@@ -111,13 +111,13 @@ main {
   display: grid;
   justify-content: center;
   align-items: center;
-  transition: top linear 350ms;
+  transition: top ease 350ms;
   font-size: 2em;
 }
 
 .results.show {
   top: 0;
-  transition: top linear 350ms;
+  transition: top ease 350ms;
 }
 
 .replay-btn {
@@ -127,11 +127,14 @@ main {
   height: 75px;
   border-radius: 38px;
   opacity: 1;
+  transition: rotate ease 200ms;
 }
 
 .replay-btn:hover {
   cursor: pointer;
   background-color: #589e37;
+  rotate: 180deg;
+  transition: rotate ease 200ms;
 }
 
 .replay-btn img {
